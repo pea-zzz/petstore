@@ -19,6 +19,8 @@ class CreateShoppingCartsTable extends Migration
             $table->foreignId('item_id')->constrained('products')->onDelete('cascade');
             $table->string('item_selection')->nullable(); // If selection is required
             $table->integer('quantity');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });
     }
