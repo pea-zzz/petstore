@@ -14,11 +14,14 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->string('id', 10)->primary();
+            $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'user']);
+            $table->string('phone_number')->nullable();  // Optional at signup but required for checkout
+            $table->text('address')->nullable();         // Optional at signup but required for checkout
+            $table->enum('role', ['admin', 'user'])->default('user');  // Default role is user
+
             $table->timestamps();
         });
     }

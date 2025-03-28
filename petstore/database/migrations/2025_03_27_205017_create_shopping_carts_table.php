@@ -15,12 +15,13 @@ class CreateShoppingCartsTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('item_id')->constrained('products')->onDelete('cascade');
-            $table->string('item_selection')->nullable(); // If selection is required
-            $table->integer('quantity');
+            $table->string('user_id');
+            $table->string('item_id');
+            $table->string('item_selection')->nullable(); // Selection can be NULL (no selection provided)
+            $table->integer('quantity')->default(1);
+            // Foreign key
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BrowsingHistory extends Model
+class OrderItem extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'user_id', 
+        'order_id', 
         'item_id', 
-        'viwed_at'
+        'quantity', 
+        'item_selection', 
+        'price'
     ];
 
-    public function user(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function item(): BelongsTo

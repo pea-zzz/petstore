@@ -14,13 +14,26 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->string('id', 10)->primary();
-            $table->string('user_id', 10);
-            $table->integer('quantity');
+            $table->id(); 
+            $table->string('user_id');
             $table->decimal('total_price', 8, 2);
+            $table->enum('status', ['pending', 'shipped', 'completed'])->default('pending'); // Order status
+            // Foreign key
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'completed', 'canceled'])->default('pending'); // Order status
             $table->timestamps();
+        });
+
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
+            $table->string('order_id');
+            $table->string('item_id');
+            $table->integer('quantity');
+            $table->string('item_selection')->nullable(); // Selection can be NULL (no selection provided)
+            $table->decimal('price', 8, 2);
+            $table->timestamps();
+            // Foreign Keys
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
         });
     }
 

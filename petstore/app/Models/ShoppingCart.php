@@ -10,15 +10,19 @@ class ShoppingCart extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'user_id', 'item_id', 'item_selection', 'quantity'];
+    protected $fillable = [
+        'user_id', 
+        'item_id', 
+        'item_selection', 
+        'quantity'];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class, 'item_id');
-    }
+        public function user(): BelongsTo
+        {
+            return $this->belongsTo(User::class);
+        }
+    
+        public function item(): BelongsTo
+        {
+            return $this->belongsTo(Item::class);
+        }
 }
