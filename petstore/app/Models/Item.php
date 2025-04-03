@@ -15,7 +15,9 @@ class Item extends Model
         'name', 
         'price', 
         'stock', 
-        'selection', 
+        //'selection',
+        'description', // Add description
+        //'image',       // Add image
         'category_id'];
 
         public function category(): BelongsTo
@@ -36,5 +38,23 @@ class Item extends Model
         public function browsingHistories(): HasMany
         {
             return $this->hasMany(BrowsingHistory::class);
+        }
+
+        // The reviews for the item
+        public function reviews(): HasMany
+        {
+            return $this->hasMany(Review::class);
+        }
+
+        // The selections for the item
+        public function selections(): HasMany
+        {
+            return $this->hasMany(Selection::class);
+        }
+
+        // Define the relationship with the Image model
+        public function images()
+        {
+            return $this->hasMany(Image::class);
         }
 }

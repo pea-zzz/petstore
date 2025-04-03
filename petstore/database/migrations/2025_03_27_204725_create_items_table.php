@@ -19,6 +19,9 @@ class CreateItemsTable extends Migration
             $table->decimal('price', 8, 2);
             $table->integer('stock');
             $table->string('selection')->nullable(); // Selection can be NULL (no selection provided)
+            $table->text('description')->nullable(); // Item description (nullable)
+            //$table->string('image')->nullable(); // Item image (nullable)
+            $table->json('image')->nullable(); // This allows storing an array of image URLs
             $table->string('category_id');
             // Foreign key
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
