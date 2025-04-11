@@ -54,11 +54,10 @@
     color: #856404;
 }
 
-/* 付款选项样式 */
 .payment-methods {
     display: flex;
-    flex-direction: column; /* 垂直排列 */
-    gap: 10px; /* 选项之间的间距 */
+    flex-direction: column; 
+    gap: 10px; 
     margin-bottom: 20px;
 }
 
@@ -68,7 +67,7 @@
 }
 
 .payment-option input[type="radio"] {
-    margin-right: 15px; /* 按钮和标签之间的间距 */
+    margin-right: 15px; 
     width: 20px;
     height: 20px;
 }

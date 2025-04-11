@@ -24,7 +24,6 @@ use App\Http\Controllers\CartController;
 |
 */
 
-Route::get('/browsing/history', [CartController::class, 'browsingHistory'])->name('browsing.history');
 Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
 Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])->name('payment.processing');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
