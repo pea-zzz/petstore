@@ -1,0 +1,79 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-success, .btn-secondary {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.alert-danger, .alert-warning {
+    margin-bottom: 20px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+/* 付款选项样式 */
+.payment-methods {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    gap: 10px; /* 选项之间的间距 */
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 15px; /* 按钮和标签之间的间距 */
+    width: 20px;
+    height: 20px;
+}
+
+.payment-option label {
+    font-size: 16px;
+    cursor: pointer;
+}
