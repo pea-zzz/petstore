@@ -10,6 +10,7 @@
 
     <!-- Optionally push additional styles for individual pages -->
     @stack('styles')
+    @yield('styles')
 
 </head>
 <body>

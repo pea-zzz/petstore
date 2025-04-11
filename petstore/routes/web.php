@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CartController;
 
 
 /*
@@ -23,9 +24,14 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
+Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])->name('payment.processing');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::post('/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
+Route::delete('/cart/remove/{item_id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::put('/cart/update/{item_id}', [CartController::class, 'updateCart'])->name('cart.update');
+Route::get('/shopping_cart', [CartController::class, 'cart'])->name('cart');
+Route::post('add_to_cart',[CartController::class,'addToCart'])->name('cart.add');
 
 // Home Page, About Us, Contact Us, and Search Results Page (not done yet)
 Route::get('/home', [HomeController::class, 'index'])->name('home');

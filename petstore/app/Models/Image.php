@@ -16,4 +16,9 @@ class Image extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function selection()
+    {
+        return $this->belongsTo(Selection::class);
+    }
 }
