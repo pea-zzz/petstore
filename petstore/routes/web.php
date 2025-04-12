@@ -11,6 +11,11 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminRegisterController;
+use Illuminate\Support\Facades\Gate;
 
 
 /*
@@ -64,3 +69,15 @@ Route::post('item/{id}/review', [ReviewController::class, 'store'])->name('revie
 Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/register/admin', [AdminRegisterController::class, 'showRegistrationForm'])->name('admin.register');
+Route::post('/register/admin', [AdminRegisterController::class, 'registerAdmin']);
+Route::middleware('can:access-admin-dashboard')->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/', function () {
+    return view('welcome');
+});
