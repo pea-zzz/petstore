@@ -1,5 +1,5 @@
 <?php
-
+// ItemController.php
 namespace App\Http\Controllers;
 
 use App\Models\Item;
@@ -10,7 +10,12 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('reviews.user')->findOrFail($id);
-        return view('item-detail', compact('item'));
+        //return view('item-detail', compact('item'));
+
+        // Calculate the average rating
+        $averageRating = $item->reviews->avg('rating');
+        return view('item-detail', compact('item', 'averageRating'));
+
     }
 
     public function store(Request $request)

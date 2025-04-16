@@ -23,7 +23,7 @@ class ItemsTableSeeder extends Seeder
         //  Items WITHOUT selections
         $items = [
             [
-                'name' => 'Yellow flower scratching post', 
+                'name' => 'Yellow Flower Scratching Post', 
                 'price' => 249.90, 
                 'stock' => 100, 
                 'category_id' => $categories['Cat Trees / Scratchers'],
@@ -31,7 +31,7 @@ class ItemsTableSeeder extends Seeder
                 'images' => ['images/cat_tree/yellow_flower_scratcher.jpg', 'images/cat_tree/yellow_flower_scratcher2.jpg' ]
             ],
             [
-                'name' => 'Stairway cat tree', 
+                'name' => 'Stairway Cat Tree', 
                 'price' => 669.90, 
                 'stock' => 100, 
                 'category_id' => $categories['Cat Trees / Scratchers'],
@@ -39,7 +39,7 @@ class ItemsTableSeeder extends Seeder
                 'images' => ['images/cat_tree/stairway_cat_tree.jpg', 'images/cat_tree/stairway_cat_tree2.jpg']
             ],
             [
-                'name' => 'Rudolph scratching ball', 
+                'name' => 'Rudolph Scratching Ball', 
                 'price' => 89.90, 
                 'stock' => 100, 
                 'category_id' => $categories['Cat Trees / Scratchers'],
@@ -47,7 +47,7 @@ class ItemsTableSeeder extends Seeder
                 'images' => ['images/cat_tree/rudolph_ball.jpg', 'images/cat_tree/rudolph_ball2.jpg']
             ],
             [
-                'name' => 'Alpaca catnip toy', 
+                'name' => 'Alpaca Catnip Toy', 
                 'price' => 27.90, 
                 'stock' => 100, 
                 'category_id' => $categories['Toys'],
@@ -63,7 +63,7 @@ class ItemsTableSeeder extends Seeder
                 'images' => ['images/toys/french_fries_cat_teaser.jpg', 'images/toys/french_fries_cat_teaser2.jpg']
             ],
             [
-                'name' => 'Wooden cat toy', 
+                'name' => 'Wooden Cat Toy', 
                 'price' => 32.90, 
                 'stock' => 100, 
                 'category_id' => $categories['Toys'],
@@ -79,12 +79,36 @@ class ItemsTableSeeder extends Seeder
                 'images' => ['images/pet_bowls/pudding_feeder.jpg', 'images/pet_bowls/pudding_feeder2.jpg', 'images/pet_bowls/pudding_feeder3.jpg']
             ],
             [
-                'name' => 'Stainless steel bowl', 
+                'name' => 'Stainless Steel Bowl', 
                 'price' => 39.90, 
                 'stock' => 100,  
                 'category_id' => $categories['Bowls'],
                 'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
                 'images' => ['images/pet_bowls/stainless_steel_bowl.jpg', 'images/pet_bowls/stainless_steel_bowl2.jpg']
+            ],
+            [
+                'name' => 'Tempura Bed', 
+                'price' => 105.90, 
+                'stock' => 100,  
+                'category_id' => $categories['Beds'],
+                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'images' => ['images\beds\tempura.jpg', 'images\beds\tempura2.jpg', 'images\beds\tempura3.jpg']
+            ],
+            [
+                'name' => 'Fluffy Round Pet Bed', 
+                'price' => 225.90, 
+                'stock' => 100,  
+                'category_id' => $categories['Beds'],
+                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'images' => ['images\beds\fluffy_round.jpg', 'images\beds\fluffy_round2.jpg', 'images\beds\fluffy_round3.jpg']
+            ],
+            [
+                'name' => 'Cookie Nest', 
+                'price' => 34.90, 
+                'stock' => 100,  
+                'category_id' => $categories['Beds'],
+                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'images' => ['images\beds\cookie_nest.jpg', 'images\beds\cookie_nest2.jpg', 'images\beds\cookie_nest3.jpg']
             ],
         ];
 
