@@ -38,38 +38,36 @@ Route::put('/cart/update/{item_id}', [CartController::class, 'updateCart'])->nam
 Route::get('/shopping_cart', [CartController::class, 'cart'])->name('cart');
 Route::post('add_to_cart',[CartController::class,'addToCart'])->name('cart.add');
 
-// Home Page, About Us, Contact Us, and Search Results Page (not done yet)
+// Home Page, About Us, Contact Us, and Search Results Page
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/search', [SearchController::class, 'search'])->name('search.results');
-
-// User Profile Page (not done yet)
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::middleware(['auth'])->get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
-
-// Browsing History Page (not done yet)
-Route::get('/browsing-history', [BrowsingHistoryController::class, 'index'])->name('browsing.history');
-Route::get('/item/{item}/view', [BrowsingHistoryController::class, 'addToHistory'])->name('browsing.add');
-
-// Categories Page (not done yet)
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');
-
-// Item Detail Page
-//Route::get('/item/{id}', [ItemController::class, 'show'])->name('item-detail');
-Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
-
-// Review Page (not done yet)
-Route::get('/item/{id}/review', [ReviewController::class, 'create'])->name('review.create');
-Route::post('item/{id}/review', [ReviewController::class, 'store'])->name('review.store');
-// only logged-in users can access this route
-//Route::post('/item/{id}/review', [ReviewController::class, 'store'])->middleware('auth')->name('review.store');
-
-// Contact Page (not done yet)
 Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
+// User Profile with view page, edit and update functionalities
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+// Browsing History Page
+Route::get('/history', [BrowsingHistoryController::class, 'index'])->name('browsing.history');
+Route::post('/history/store/{itemId}', [BrowsingHistoryController::class, 'store'])->name('browsing.history.store');
+Route::post('/history/clear', [BrowsingHistoryController::class, 'clear'])->name('browsing.history.clear');
+
+// Our Products Page (Categories Page)
+//Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+//Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+// Item Detail Page
+Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
+
+// Review Page
+Route::get('/items/{id}/review', [ReviewController::class, 'create'])->name('review.create');
+Route::post('items/{id}/review', [ReviewController::class, 'store'])->name('review.store');
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);

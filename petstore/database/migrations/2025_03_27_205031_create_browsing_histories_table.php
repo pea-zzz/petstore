@@ -15,12 +15,9 @@ class CreateBrowsingHistoriesTable extends Migration
     {
         Schema::create('browsing_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->nullable();          // Nullable for guests
-            $table->string('item_id');
-            $table->timestamp('viewed_at')->useCurrent();
-            // Foreign key
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('item_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

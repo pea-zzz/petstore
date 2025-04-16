@@ -55,8 +55,10 @@
                         <p><strong>{{ $review->user ? $review->user->name : 'Unknown User' }}</strong></p>
                         <p>Rating: {{ $review->rating }} stars</p>
                         <p>{{ $review->comment }}</p>
+                        <br>
                     </div>
                 @endforeach
+                <p><strong>Click <a href="{{ route('review.create', $item->id) }}">here</a> to add your review now!</strong></p>
             @endif
         </div>
     </div>

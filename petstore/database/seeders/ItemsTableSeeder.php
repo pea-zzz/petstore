@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Item;
+use App\Models\Category;
 use App\Models\Selection;
 use App\Models\Image;
 
@@ -21,7 +22,7 @@ class ItemsTableSeeder extends Seeder
         $categories = DB::table('categories')->pluck('id', 'name');
 
         //  Items WITHOUT selections
-        $items = [
+        $itemsWithoutSelections = [
             [
                 'name' => 'Yellow Flower Scratching Post', 
                 'price' => 249.90, 
@@ -91,7 +92,7 @@ class ItemsTableSeeder extends Seeder
                 'price' => 105.90, 
                 'stock' => 100,  
                 'category_id' => $categories['Beds'],
-                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'description' => "Nothing like a cosying up with a juicy, battered prawn! Yums! Filled to the brim with plush for ultimate comfort, whilst boasting a removable inner cushion for easy clean up. We think the chef's hat makes a cute little pillow for your Haiwan's head, after the long day they'd had doing absolutely nothing.\n\nThe bottom is equipped with anti-skid base to keep your Tempura Bed intact - just in case your Haiwan is a restless sleeper!\n\nMeasurement: 50L x 50W x 38H.",
                 'images' => ['images\beds\tempura.jpg', 'images\beds\tempura2.jpg', 'images\beds\tempura3.jpg']
             ],
             [
@@ -99,7 +100,7 @@ class ItemsTableSeeder extends Seeder
                 'price' => 225.90, 
                 'stock' => 100,  
                 'category_id' => $categories['Beds'],
-                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'description' => "Fluffy Round Pet Bed with Non-slip, Soothing Soft Plush Donut Cushion.\n\nMaterial: Polyester\nColor: Light Grey",
                 'images' => ['images\beds\fluffy_round.jpg', 'images\beds\fluffy_round2.jpg', 'images\beds\fluffy_round3.jpg']
             ],
             [
@@ -107,13 +108,13 @@ class ItemsTableSeeder extends Seeder
                 'price' => 34.90, 
                 'stock' => 100,  
                 'category_id' => $categories['Beds'],
-                'description' => "• Raised litter box: The wooden frame of the cat bowl is made durable and is made of natural bamboo. The 3 trays of the cat litter box set are made of food grade stainless steel and therefore completely safe in terms of composition. Guaranteed food safe and free from chemical or harmful substances - only the best for your pet.\n\n• Multi-purpose: the 3-piece feeder holder with 3 stainless steel bowls are ideal for cats or small dogs such as chihuahua, Prague rotler. The dog bar is suitable for water, dry and wet food. The high-quality wooden box holders have a water-repellent coating for a long service life. Simply wipe the surface of the feed frame with a damp cloth stainless steel bowl.",
+                'description' => "A decadent, cream-filled cookie - only it's your Haiwan inside! This delicious nest features a removable inner cushion and roof for flexibility and ease of upkeep.\n\nThe outer structure is not machine washable - you may use a wet tissue or wet cloth to clean it. However, its inner cushion is removable and machine washable - be sure to place it inside a laundry bag prior to chucking it into the machine!\n\nMeasures D50 x H20 cm.",
                 'images' => ['images\beds\cookie_nest.jpg', 'images\beds\cookie_nest2.jpg', 'images\beds\cookie_nest3.jpg']
             ],
         ];
 
         // Insert items without selections
-        foreach ($items as $itemData) {
+        foreach ($itemsWithoutSelections as $itemData) {
             $images = $itemData['images'];  // Grab the images array
 
             // Create the item
@@ -144,11 +145,7 @@ class ItemsTableSeeder extends Seeder
                 'category_id' => $categories['Bowls'],
                 'description' => "Indulge your beloved pet with our unique pet bowls, inspired by the vibrant freshness of fruit. Each bowl is not only a functional item for your pet's daily meals but also a playful accent piece that adds a cheerful vibe to your home decor. With these fruit-inspired bowls, your pet's dining area becomes a bright and happy corner, reflecting the loving care you put into every aspect of their lives.\n\n• Material: Ceramic\n• Note: Minor imperfections such as black spots, pin holes, and uneven glaze may exist after high-temperature firing, which is normal.\n• Package List: 1 Bowl",
                 'images' => ['images/pet_bowls/ceramic_bowl.jpg', 'images/pet_bowls/ceramic_bowl2.jpg'],
-                'selections' => [
-                    ['option' => 'Dragon fruit', 'image' => 'images/pet_bowls/ceramic_bowl_dragonfruit.jpg'],
-                    ['option' => 'Watermelon', 'image' => 'images/pet_bowls/ceramic_bowl_watermelon.jpg'],
-                    ['option' => 'Lemon', 'image' => 'images/pet_bowls/ceramic_bowl_lemon.jpg'],
-                ]
+                'selections' => ['Dragon Fruit', 'Watermelon', 'Lemon'],
             ],
             [
                 'name' => 'Polyester Woven Fabric Jacket', 
@@ -157,11 +154,7 @@ class ItemsTableSeeder extends Seeder
                 'category_id' => $categories['Clothes'],
                 'description' => "• Color: Coffee color\n• Main Wearing Method: Press Buckle\n• Composition/Cover Composition: 100% Polyester\n• Weaving Method: Woven",
                 'images' => ['images/clothes/woven_fabric_jacket.jpg', 'images/clothes/woven_fabric_jacket2.jpg', 'images/clothes/woven_fabric_jacket3.jpg'],
-                'selections' => [
-                        ['option' => 'S', 'image' => 'images/clothes/woven_fabric_jacket.jpg'],
-                        ['option' => 'M', 'image' => 'images/clothes/woven_fabric_jacket2.jpg'],
-                        ['option' => 'L', 'image' => 'images/clothes/woven_fabric_jacket3.jpg'],
-                    ]
+                'selections' => ['S', 'M', 'L'],
             ],
             [
                 'name' => 'Flower Styled Cat Cone', 
@@ -170,7 +163,7 @@ class ItemsTableSeeder extends Seeder
                 'category_id' => $categories['Clothes'],
                 'description' => "Features:\n• Scratch & Bite-resistant: The pet collar is designed to protect your pets from injuries, rashes, and post-surgery wounds.\n• Comfortable & Not Block Vision: Make your pet wear it comfortably and it does not block your pets' vision. They can eat, drink, play and sleep normally.\n• Cute flower shape design.\n• Easy to Use & Highly Durable: The new-style recovery collar is soft and washable.\n\nMaterial:\n• Fiber cotton, crystal litters\n\nNeck measurement:\n• 9.8cm",
                 'images' => ['images/clothes/flower_cat_cone.jpg', 'images/clothes/flower_cat_cone2.jpg'],
-                'selections' => [['option' => 'One size', 'image' => 'images/clothes/flower_cat_cone2.jpg']]
+                'selections' => ['One Size'],
             ],
             [
                 'name' => 'Cute Cowboy Pet Costume', 
@@ -179,18 +172,14 @@ class ItemsTableSeeder extends Seeder
                 'category_id' => $categories['Clothes'],
                 'description' => "Features:\n• Theme: Cowboy\n• Material: Polyester\n• Filling Material: Polyester\n• Pattern: Cowboy\n• All-season: Summer, Spring\n• Breed Recommendation: Small, Medium\n• Operation Instruction: Machine Wash\n• Main Wearing Method: Pullover\n• Weaving Method: Woven",
                 'images' => ['images/clothes/cowboy_costume.jpg', 'images/clothes/cowboy_costume2.jpg', 'images/clothes/cowboy_costume3.jpg'],
-                'selections' => [
-                    ['option' => 'S', 'image' => 'images/clothes/cowboy_costume2.jpg'],
-                    ['option' => 'M', 'image' => 'images/clothes/cowboy_costume3.jpg'],
-            ]
+                'selections' => ['S', 'M'],
             ],
         ];
 
         // Insert items with selections and create selection records
         foreach ($itemsWithSelections as $itemData) {
-            $selectionsData = $itemData['selections'];
+            $selections = $itemData['selections'];
             $images = $itemData['images'];  // Store images in a separate variable
-            unset($itemData['selections']); // Remove selection before inserting item
 
             // Create the item
             $item = Item::create([
@@ -211,19 +200,11 @@ class ItemsTableSeeder extends Seeder
             }
 
             // Insert selections with their corresponding images
-            foreach ($selectionsData as $selectionData) {
+            foreach ($selections as $selectionOption) {
                 // Create the selection
-                $selection = Selection::create([
-                    'option' => $selectionData['option'],
+                Selection::create([
+                    'option' => $selectionOption,
                     'item_id' => $item->id,
-                    'image' => $selectionData['image']  // Store selection image URL
-                ]);
-            
-                // Create an image for each selection
-                Image::create([
-                    'url' => $selectionData['image'],
-                    'item_id' => $item->id,
-                    'selection_id' => $selection->id  // Link image to selection
                 ]);
             }
         }

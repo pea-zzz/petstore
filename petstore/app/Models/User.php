@@ -37,7 +37,7 @@ class User extends Authenticatable
         return $this->hasMany(ShoppingCart::class);
     }
 
-    public function browsingHistory()
+    public function browsingHistories()
     {
         return $this->hasMany(BrowsingHistory::class);
     }

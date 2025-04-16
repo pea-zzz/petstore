@@ -27,12 +27,11 @@
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('categories') }}">Our Products</a></li>
+                <li><a href="{{ route('categories.index') }}">Our Products</a></li>
                 <li><a href="{{ route('profile') }}">Profile</a></li>
                 <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
                 <li><a href="{{ route('contact') }}">Contact</a></li>
                 <li><a href="{{ route('about') }}">About Us</a></li>
-                <!--<li><a href="{{ route('search.results') }}">Search</a></li>-->
 
                 <!-- Conditional Links Based on Authentication -->
                 @guest
