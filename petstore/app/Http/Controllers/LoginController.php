@@ -29,12 +29,12 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
     
-        // Attempt to login
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
     
-            // Set a cookie for session tracking
-            $cookie = cookie('user_session', Auth::user()->id, 60); // 60 minutes
+            // Remember me functionality
+            $minutes = $request->has('remember') ? 60 * 24 * 7 : 60; // 1 week if "remember me" is checked, otherwise 1 hour
+            $cookie = cookie('user_session', Auth::user()->id, $minutes);
     
             $user = Auth::user();
             if ($user->role === 'admin') {
@@ -44,11 +44,11 @@ class LoginController extends Controller
             return redirect()->intended($this->redirectTo)->withCookie($cookie);
         }
     
-        // Login failed
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->withInput($request->only('email', 'remember'));
     }
+    
 
     public function logout(Request $request)
     {
@@ -58,6 +58,8 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         // Redirect to the login page after logout
-        return redirect()->route('login')->with('status', 'You have been logged out.');
-    }
+        return redirect()->route('login')
+        ->with('status', 'You have been logged out.')
+        ->withCookie(cookie()->forget('user_session'));
+        }
 }
