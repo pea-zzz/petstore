@@ -7,6 +7,8 @@
 
     <!-- Link to your main CSS file -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+    
 
     <!-- Optionally push additional styles for individual pages -->
     @stack('styles')
@@ -30,7 +32,7 @@
                 <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
                 <li><a href="{{ route('contact') }}">Contact</a></li>
                 <li><a href="{{ route('about') }}">About Us</a></li>
-                <li><a href="{{ route('search.results') }}">Search</a></li>
+                <!--<li><a href="{{ route('search.results') }}">Search</a></li>-->
 
                 <!-- Conditional Links Based on Authentication -->
                 @guest

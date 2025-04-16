@@ -57,7 +57,8 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');
 
 // Item Detail Page
-Route::get('/item/{id}', [ItemController::class, 'show'])->name('item-detail');
+//Route::get('/item/{id}', [ItemController::class, 'show'])->name('item-detail');
+Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
 
 // Review Page (not done yet)
 Route::get('/item/{id}/review', [ReviewController::class, 'create'])->name('review.create');
