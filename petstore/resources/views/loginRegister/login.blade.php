@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .remember-me-container {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap; 
+    }
+
+    .remember-me-container input[type="checkbox"] {
+        transform: scale(1.1);
+        margin: 0;
+    }
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -8,9 +22,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <!-- Check if the user is authenticated -->
                     @auth
-                        <!-- Logout Button -->
                         <div class="text-center mb-3">
                             <a class="btn btn-danger" href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -53,6 +65,16 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-4">
+                                <div class="remember-me-container">
+                                    <span>Remember Me</span>
+                                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                </div>
                             </div>
                         </div>
 
