@@ -47,6 +47,9 @@ class RegisterController extends Controller
         // Log the user in
         Auth::login($user);
 
+        // Migrate guest history after login
+        app(\App\Http\Controllers\BrowsingHistoryController::class)->migrateGuestHistory();
+
         // Redirect to the intended path
         return redirect($this->redirectTo);
     }

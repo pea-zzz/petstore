@@ -1,5 +1,6 @@
 <?php
-
+// searchController.php
+// searchController.php
 namespace App\Http\Controllers;
 
 use App\Models\Item;
@@ -11,7 +12,14 @@ class SearchController extends Controller
     {
         $query = $request->input('query');
         $items = Item::where('name', 'like', "%{$query}%")->get();
-        
-        return view('search-results', compact('items'));
+        $message = null;
+
+        if ($items->isEmpty()) {
+            $message = "Search result is not found.";
+        }
+
+        return view('search-results', compact('items', 'query', 'message'));
     }
 }
+
+

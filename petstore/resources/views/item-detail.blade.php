@@ -1,3 +1,4 @@
+<!-- item-detail.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -32,6 +33,16 @@
         </div>
         <br>
 
+        <!-- Display Average Rating -->
+        <h3>Average Rating:</h3>
+        <p>
+            @if($averageRating > 0)
+                {{ round($averageRating, 1) }} Stars
+            @else
+                No ratings yet.
+            @endif
+        </p>
+        <br>
         <!-- Display existing reviews -->
         <h3>Reviews</h3>
         <div style="text-align: left;">
@@ -44,8 +55,10 @@
                         <p><strong>{{ $review->user ? $review->user->name : 'Unknown User' }}</strong></p>
                         <p>Rating: {{ $review->rating }} stars</p>
                         <p>{{ $review->comment }}</p>
+                        <br>
                     </div>
                 @endforeach
+                <p><strong>Click <a href="{{ route('review.create', $item->id) }}">here</a> to add your review now!</strong></p>
             @endif
         </div>
     </div>

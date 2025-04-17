@@ -31,6 +31,9 @@ class LoginController extends Controller
     
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            // Migrate guest history after login
+            app(\App\Http\Controllers\BrowsingHistoryController::class)->migrateGuestHistory();
     
             // Remember me functionality
             $minutes = $request->has('remember') ? 60 * 24 * 7 : 60; // 1 week if "remember me" is checked, otherwise 1 hour
@@ -40,10 +43,10 @@ class LoginController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard')->withCookie($cookie);
             }
-    
+            
             return redirect()->intended($this->redirectTo)->withCookie($cookie);
         }
-    
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->withInput($request->only('email', 'remember'));
