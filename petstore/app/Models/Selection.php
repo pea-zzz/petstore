@@ -9,7 +9,7 @@ class Selection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['option', 'image_url', 'item_id'];
+    protected $fillable = ['option', 'item_id'];
 
     public function item()
     {

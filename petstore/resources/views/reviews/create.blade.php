@@ -6,7 +6,7 @@
         <form action="{{ route('review.store', $item->id) }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="rating">Rating:</label>
+                <label for="rating">Rating (1-5 stars):</label>
                 <input type="number" name="rating" min="1" max="5" required>
             </div>
             <div class="form-group">

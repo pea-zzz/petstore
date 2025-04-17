@@ -32,6 +32,9 @@ class LoginController extends Controller
         // Attempt to login
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Migrate guest history after login
+            app(\App\Http\Controllers\BrowsingHistoryController::class)->migrateGuestHistory();
     
             // Set a cookie for session tracking
             $cookie = cookie('user_session', Auth::user()->id, 60); // 60 minutes
@@ -40,10 +43,10 @@ class LoginController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard')->withCookie($cookie);
             }
-    
+            
             return redirect()->intended($this->redirectTo)->withCookie($cookie);
         }
-    
+
         // Login failed
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

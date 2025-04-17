@@ -1,9 +1,9 @@
 <?php
-
+// ContactController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -32,13 +32,12 @@ class ContactController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
-        // Handle the form submission (you can send an email here, store the message in the database, etc.)
-        // Example: sending an email to the admin
+        // Simulate handling
+        Log::info('Contact message simulated', $request->only('name', 'email', 'message'));
 
-        // You can configure the email settings in .env and use Mail::to() to send an email.
-        Mail::to('support@petstore.com')->send(new \App\Mail\ContactMessage($request));
-
-        // Redirect back with a success message
-        return redirect()->route('contact')->with('success', 'Your message has been sent successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Your feedback message is sent!',
+        ]);
     }
 }
