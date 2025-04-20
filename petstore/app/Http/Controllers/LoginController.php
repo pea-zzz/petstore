@@ -13,7 +13,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // 用户登录
+
     public function showUserLoginForm()
     {
         return view('auth.login');
@@ -26,12 +26,11 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $remember = $request->has('remember'); // ✅ 加这一行
+        $remember = $request->has('remember'); 
 
-        if (Auth::attempt($credentials, $remember)) { // ✅ 传进去
+        if (Auth::attempt($credentials, $remember)) { 
             $request->session()->regenerate();
             
-            // 检查用户角色，跳转到对应的页面
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {
@@ -44,10 +43,10 @@ class LoginController extends Controller
         ]);
     }
 
-    // 管理员登录
+
     public function showAdminLoginForm()
     {
-        return view('auth.login', ['url' => 'admin']); // 传递 'admin' 以便区分视图
+        return view('auth.login', ['url' => 'admin']); 
     }
 
     public function adminLogin(Request $request)
@@ -57,27 +56,26 @@ class LoginController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        $remember = $request->has('remember'); // ✅ 同样加这一行
+        $remember = $request->has('remember'); 
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
-            session()->forget('url.intended'); // 清除 redirect URL，防止跳错
+            session()->forget('url.intended'); 
 
-            // 额外检查角色，确保是管理员
             if (Auth::guard('admin')->user()->role == 'admin') {
-                return redirect()->route('admin.dashboard'); // 强制跳转到管理员面板
+                return redirect()->route('admin.dashboard');
             }
         }
 
         return back()->withInput($request->only('email', 'remember'));
     }
 
-    // 退出登录
+
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/home'); // 登出后重定向到 home
+        return redirect('/home');
     }
 }
