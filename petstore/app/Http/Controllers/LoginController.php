@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
+    use AuthenticatesUsers;
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
