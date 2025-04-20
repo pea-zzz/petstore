@@ -87,7 +87,7 @@
                                 <label for="online_banking">Online Banking</label>
                             </div>
                         </div>
-                        <a href="{{ route('cart') }}" class="btn btn-secondary" style="margin-right: 10px;">Back to Cart</a>
+                        <a href="{{ route('shopping.cart') }}" class="btn btn-secondary" style="margin-right: 10px;">Back to Cart</a>
                         <button type="submit" class="btn btn-success">Confirm Order</button>
                     </form>
                 </div>

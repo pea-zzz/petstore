@@ -35,7 +35,7 @@
                         </div>
                     @endauth
 
-                    <form method="POST" action="{{ route('login') }}" novalidate>
+                    <form method="POST" action="{{ isset($url) && $url == 'admin' ? url('login/admin') : route('login') }}">
                         @csrf
 
                         <!-- Email Address -->

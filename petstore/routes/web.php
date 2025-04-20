@@ -14,7 +14,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminRegisterController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Gate;
 
 
@@ -29,14 +29,48 @@ use Illuminate\Support\Facades\Gate;
 |
 */
 
-Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
-Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])->name('payment.processing');
+// Registration and Login Routes
+Route::get('/login', [LoginController::class, 'showUserLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'userLogin']);
+
+Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
+Route::post('/login/admin', [LoginController::class, 'adminLogin'])->name('admin.login');
+
+Route::get('/register', [RegisterController::class, 'showUserRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::get('/register/admin', [RegisterController::class, 'showAdminRegistrationForm'])->name('admin.register');
+Route::post('/register/admin', [RegisterController::class, 'registerAdmin']);
+
+// Routes accessible to all logged-in users
+Route::middleware('auth')->group(function () {
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
+
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+// Routes only accessible to admins
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('items/create', [ItemController::class, 'create'])->name('items.create'); // create-item view
+    Route::post('items', [ItemController::class, 'store'])->name('items.store');
+    Route::get('orders', [OrderController::class, 'adminIndex'])->name('orders.index'); // orders.blade.php
+});
+
+
+// Shopping cart routes
+Route::get('/shopping_cart', [CartController::class, 'cart'])->name('shopping.cart');
+Route::put('/cart/update/{id}', [CartController::class, 'updateCart'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/add_to_cart', [CartController::class, 'addToCart'])->middleware('auth')->name('cart.add');
+
+// Checkout and Payment Processing routes
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
-Route::delete('/cart/remove/{item_id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
-Route::put('/cart/update/{item_id}', [CartController::class, 'updateCart'])->name('cart.update');
-Route::get('/shopping_cart', [CartController::class, 'cart'])->name('cart');
-Route::post('add_to_cart',[CartController::class,'addToCart'])->name('cart.add');
+Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])->name('payment.processing');
+Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
 
 // Home Page, About Us, Contact Us, and Search Results Page
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -58,8 +92,6 @@ Route::post('/history/store/{itemId}', [BrowsingHistoryController::class, 'store
 Route::post('/history/clear', [BrowsingHistoryController::class, 'clear'])->name('browsing.history.clear');
 
 // Our Products Page (Categories Page)
-//Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-//Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 // Item Detail Page
@@ -69,14 +101,3 @@ Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
 Route::get('/items/{id}/review', [ReviewController::class, 'create'])->name('review.create');
 Route::post('items/{id}/review', [ReviewController::class, 'store'])->name('review.store');
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/register/admin', [AdminRegisterController::class, 'showRegistrationForm'])->name('admin.register');
-Route::post('/register/admin', [AdminRegisterController::class, 'registerAdmin']);
-Route::middleware('can:access-admin-dashboard')->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-Route::get('/', function () {
-    return view('welcome');
-});

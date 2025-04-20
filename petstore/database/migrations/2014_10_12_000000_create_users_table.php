@@ -18,10 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('phone_number')->nullable();  // Optional at signup but required for checkout
-            $table->text('address')->nullable();         // Optional at signup but required for checkout
+            $table->string('phone_number')->nullable();  
+            $table->text('address')->nullable();        
             $table->enum('role', ['admin', 'user'])->default('user');  // Default role is user
-
+            $table->rememberToken(); 
             $table->timestamps();
         });
     }

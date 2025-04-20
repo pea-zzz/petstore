@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Config;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,5 +29,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('access-admin-dashboard', function ($user) {
             return $user->role === 'admin';
         });
+
+        // Set the lifetime of the remember_token cookie (in minutes)
+        Config::set('session.lifetime', 60 * 24 * 3); // 3 days
+        Config::set('session.expire_on_close', false); // Do not log out immediately when the browser is closed
+      
     }
 }

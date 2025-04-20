@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\BrowsingHistory;
+use App\Models\Category;
+use App\Models\Selection;
 
 class ItemController extends Controller
 {
@@ -34,22 +36,34 @@ class ItemController extends Controller
 
     }
 
+    public function create()
+    {
+        $categories = Category::all();
+        return view('admin.create-item', compact('categories'));
+    }
+
     public function store(Request $request)
     {
+        // 表单验证
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'stock' => 'required|integer|min:1',
             'category_id' => 'required|exists:categories,id',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Main image is required
+            'selections' => 'nullable|array',
+            'selections.*.option' => 'nullable|string',
         ]);
 
+        dd('stopped');
+    
+        // 处理上传的图片和选择项
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('items', 'public');
         }
-
+    
         $item = Item::create([
             'name' => $request->name,
             'price' => $request->price,
@@ -58,7 +72,22 @@ class ItemController extends Controller
             'description' => $request->description,
             'image' => $imagePath,
         ]);
-
-        return redirect()->route('item-detail', ['id' => $item->id]);
+    
+        // Handle Selections
+        if ($request->has('selections')) {
+            foreach ($request->selections as $selection) {
+                if ($selection['option']) {
+                    $item->selections()->create([
+                        'option' => $selection['option'],
+                        'image_url' => $selection['image_url'] ?? null,
+                    ]);
+                }
+            }
+        }
+    
+        return redirect()->route('admin.items.create')->with('success', 'Item created successfully!');
     }
+    
+    
+    
 }

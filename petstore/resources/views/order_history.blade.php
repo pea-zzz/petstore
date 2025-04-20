@@ -30,7 +30,7 @@
                                 <tr>
                                     <td style="vertical-align: middle;">{{ $item->item->name ?? 'Unknown Product' }}</td>
                                     <td style="vertical-align: middle;">RM{{ number_format($item->price, 2) }}</td>
-                                    <td style="vertical-align: middle;">{{ $item->Item_selection ?? 'N/A' }}</td>
+                                    <td style="vertical-align: middle;">{{ $item->item_selection ?? 'N/A' }}</td>
                                     <td style="vertical-align: middle;">{{ $item->quantity }}</td>
                                     <td style="vertical-align: middle;">RM{{ number_format($item->price * $item->quantity, 2) }}</td>
                                 </tr>

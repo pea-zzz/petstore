@@ -2,31 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Models\Admin; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 
 class RegisterController extends Controller
 {
-    protected $redirectTo = RouteServiceProvider::HOME;
-
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    public function showRegistrationForm()
+    public function showUserRegistrationForm()
     {
-        return view('loginRegister.register');
+        return view('auth.register');
     }
 
     public function register(Request $request)
     {
-        // Validate input data
         $request->validate([
             'name' => 'required | max:255',
             'email' => 'required | email | max:255 | unique:users',
@@ -35,23 +31,49 @@ class RegisterController extends Controller
             'address' => 'required | max:500', 
         ]);
 
-        // Create a new user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone_number' => $request->phone_number,
             'address' => $request->address,
+            'role' => 'user', 
         ]);
 
-        // Log the user in
-        Auth::login($user);
+        return redirect()->route('login')->with('success', 'Registration successful. Please login.');
+    }
 
-        // Migrate guest history after login
-        app(\App\Http\Controllers\BrowsingHistoryController::class)->migrateGuestHistory();
 
-        // Redirect to the intended path
-        return redirect($this->redirectTo);
+    public function showAdminRegistrationForm()
+    {
+        return view('auth.adminRegister');
+    }
+
+    public function registerAdmin(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users|unique:admins',
+            'password' => 'required | min:8 | max:15 | regex:/[a-z]/ | regex:/[A-Z]/ | regex:/[0-9]/ | regex:/[@$!%*#?&]/ | confirmed',
+        ]);
+
+        $admin = Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        User::create([
+            'name' => $admin->name,
+            'email' => $admin->email,
+            'password' => $admin->password, 
+            'role' => 'admin',
+        ]);
+
+
+        Auth::guard('admin')->login($admin);
+
+        return redirect()->route('admin.dashboard')->with('status', 'Admin registered successfully.');
     }
 
 }

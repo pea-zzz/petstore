@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Pet Store') }}</title>
+    <title>{{ config('app.name', 'Pawzy Pet Store') }}</title>
 
     <!-- Link to your main CSS file -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
-    
 
     <!-- Optionally push additional styles for individual pages -->
     @stack('styles')
@@ -18,38 +16,59 @@
 <body>
 
     <!-- Header -->
-    <header>
-        <div class="logo">
-            <a href="{{ route('home') }}">Pet Store</a>
-        </div>
+<header>
+    <div class="logo">
+        <a href="{{ route('home') }}">
+            <img src="{{ asset('images/logo/logo.png') }}" alt="Pet Store Logo" style="height: 80px; margin-left: 50px;">
+        </a>
+    </div>
 
-        <!-- Navigation Bar -->
-        <nav>
-            <ul>
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('categories.index') }}">Our Products</a></li>
-                <li><a href="{{ route('profile') }}">Profile</a></li>
-                <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
-                <li><a href="{{ route('about') }}">About Us</a></li>
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('categories.index') }}">Our Products</a></li>
+            <li><a href="{{ route('profile') }}">Profile</a></li>
+            <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
+            <li><a href="{{ route('contact') }}">Contact</a></li>
+            <li><a href="{{ route('about') }}">About Us</a></li>
+            
+            <!-- Add Order History link -->
+            @auth
+                <li><a href="{{ route('order.history') }}">Order History</a></li>
+            @endauth
 
-                <!-- Conditional Links Based on Authentication -->
-                @guest
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                @else
+            <!-- Conditional Links Based on Authentication -->
+            @guest
+                <li><a href="{{ route('login') }}">Login</a></li>
+            @else
+                <li>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+
+                <!-- Add Cart Icon for Non-Admin Users -->
+                @if (Auth::check() && Auth::user()->role != 'admin')
                     <li>
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
+                        <a href="{{ route('shopping.cart') }}">
+                            <img src="{{ asset('images/logo/cart-icon.png') }}" alt="Shopping Cart" style="height: 30px;">
+                            @if(isset($cartCount) && $cartCount > 0)
+                                <span class="badge badge-danger">{{ $cartCount }}</span>
+                            @endif
                         </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
                     </li>
-                @endguest
-            </ul>
-        </nav>
-    </header>
+                @endif
+
+            @endguest
+        </ul>
+    </nav>
+</header>
+
 
     <!-- Main Content -->
     <main>
@@ -61,7 +80,7 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>&copy; {{ date('Y') }} Pet Store. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Pawzy Pet Store. All rights reserved.</p>
             <ul>
                 <li><a href="{{ route('about') }}">About Us</a></li>
                 <li><a href="{{ route('contact') }}">Contact</a></li>

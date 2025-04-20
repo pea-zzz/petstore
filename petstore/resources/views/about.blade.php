@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1>Our Story</h1>
-    <p>Welcome to <strong>Pet Store</strong>! 🐾</p>
+    <p>Welcome to <strong>Pawzy Pet Store</strong>! 🐾</p>
 
     <p>At Pet Store, we are dedicated to providing pet owners with an unparalleled online shopping experience for all their furry, scaly, and feathered friends. Since our launch, we’ve worked tirelessly to offer a wide range of high-quality pet products delivered right to your doorstep. Whether you're looking for food, toys, accessories, or grooming supplies, we've got everything you need to keep your pets happy and healthy.</p>
     <br>

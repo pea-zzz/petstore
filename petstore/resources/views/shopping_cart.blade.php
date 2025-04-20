@@ -43,20 +43,24 @@
                             <td style="vertical-align: middle;">RM{{ number_format($item->price, 2) }}</td>
                             <td style="vertical-align: middle;">{{ $item->item_selection ?? 'N/A' }}</td>
                             <td style="vertical-align: middle;">
-                                <form action="{{ route('cart.update', $item->item_id) }}" method="POST" style="display: flex; align-items: center; gap: 10px;">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="number" name="quantity" value="{{ $item->qty }}" min="1" style="width: 60px; padding: 5px;">
-                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
-                                </form>
+                            <form action="{{ route('cart.update', $item->id) }}" method="POST" style="display: flex; align-items: center; gap: 10px;">
+                                @csrf
+                                @method('PUT')
+                                <input type="number" name="quantity" value="{{ $item->qty }}" min="1" style="width: 60px; padding: 5px;">
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </form>
+
+
+
                             </td>
                             <td style="vertical-align: middle;">RM{{ number_format($item->price * $item->qty, 2) }}</td>
                             <td style="vertical-align: middle;">
-                                <form action="{{ route('cart.remove', $item->item_id) }}" method="POST">
+                                <form action="{{ route('cart.remove', $item->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                                 </form>
+
                             </td>
                         </tr>
                     @endforeach

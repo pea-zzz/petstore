@@ -7,19 +7,21 @@ use App\Models\Selection;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\ShoppingCart;
+use App\Models\ItemSelection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function history(Request $request)
+    public function history()
     {
-        $orders = Order::where("user_id", 1)
-            ->with(["orderItems.item"])
-            ->orderBy("created_at", "desc")
-            ->get();
-
-        return view("order_history", compact("orders"));
+        $user = auth()->user(); // 获取当前登录用户
+        $orders = $user->orders()->with('orderItems.item')->get(); // 获取用户的所有订单，并加载订单项及对应的商品
+    
+        return view('order_history', compact('orders'));
     }
+    
 
     public function paymentProcessing()
     {
@@ -28,76 +30,61 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        $cart = $request->session()->get("cart", []);
+        // 获取当前用户的购物车
+        $cart = ShoppingCart::where('user_id', Auth::id())->get();
 
-        if (empty($cart)) {
+        if ($cart->isEmpty()) {
             return redirect()
                 ->route("cart")
                 ->with("error", "Your cart is empty.");
         }
 
-        $item_ids = array_map(function ($item) {
-            return $item["item_id"];
-        }, $cart);
+        // 获取购物车中的 item_ids
+        $item_ids = $cart->pluck('item_id')->toArray();
 
-        $items = Item::with("images")
-            ->whereIn("id", $item_ids)
-            ->select("id", "name", "price")
+        // 获取与购物车项相关的商品
+        $items = Item::with('images')
+            ->whereIn('id', $item_ids)
+            ->select('id', 'name', 'price')
             ->get()
-            ->keyBy("id");
+            ->keyBy('id');
 
         $list = collect([]);
         $subtotal = 0;
         $updatedCart = [];
         $invalidItems = false;
 
-        foreach ($cart as $cart_key => $cart_item) {
-            $item_id = $cart_item["item_id"];
-            $quantity = $cart_item["quantity"];
-            $selection_id = $cart_item["item_selection"] ?? null;
-
-            $item = $items->get($item_id);
+        // 更新购物车数据
+        foreach ($cart as $cart_item) {
+            $item = $items->get($cart_item->item_id);
 
             if ($item) {
-                $selection_option = $selection_id
-                    ? ItemSelection::where("id", $selection_id)->value("option")
-                    : null;
+                $selection_option = $cart_item->item_selection ? $cart_item->item_selection : 'N/A';
 
                 $list->push(
                     (object) [
-                        "item_id" => $item_id,
-                        "name" => $item->name,
-                        "price" => $item->price,
-                        "qty" => $quantity,
-                        "item_selection" => $selection_option ?? "N/A",
-                        "image" => $item->images->isNotEmpty()
-                            ? $item->images->first()->url
-                            : null,
-                    ],
+                        'item_id' => $cart_item->item_id,
+                        'name' => $item->name,
+                        'price' => $item->price,
+                        'qty' => $cart_item->quantity,
+                        'item_selection' => $selection_option,
+                        'image' => $item->images->isNotEmpty() ? $item->images->first()->url : null,
+                    ]
                 );
 
-                $subtotal += $item->price * $quantity;
-                $updatedCart[$cart_key] = $cart_item;
+                $subtotal += $item->price * $cart_item->quantity;
+                $updatedCart[] = $cart_item;
             } else {
                 $invalidItems = true;
             }
         }
 
-        $request->session()->put("cart", $updatedCart);
-
-        if ($invalidItems) {
-            $request
-                ->session()
-                ->flash(
-                    "warning",
-                    "Some items in your cart are no longer available and have been removed.",
-                );
-        }
-
+        // 计算运费和总价
         $shippingFee = 5.0;
         $total = $subtotal + $shippingFee;
 
-        $user = User::find(1);
+        // 用户验证
+        $user = Auth::user();
 
         if (!$user) {
             return redirect()
@@ -105,61 +92,70 @@ class CartController extends Controller
                 ->with("error", "User not found.");
         }
 
-        return view(
-            "checkout",
-            compact("list", "subtotal", "shippingFee", "total", "user"),
-        );
+        // 渲染结账页面
+        return view('checkout', compact('list', 'subtotal', 'shippingFee', 'total', 'user'));
     }
+
 
     public function processCheckout(Request $request)
     {
-        $cart = $request->session()->get("cart", []);
-        if (empty($cart)) {
+        // 获取当前用户的购物车
+        $cart = ShoppingCart::where('user_id', Auth::id())->get();
+    
+        if ($cart->isEmpty()) {
             return redirect()
                 ->route("cart")
                 ->with("error", "Your cart is empty.");
         }
-
+    
+        // 获取支付方式
         $paymentMethod = $request->input("payment_method");
         if (!$paymentMethod) {
             return redirect()
                 ->route("checkout")
                 ->with("error", "Please select a payment method.");
         }
-
-        $subtotal = collect($cart)->sum(function ($cartItem) {
-            $item = Item::find($cartItem["item_id"]);
-            return $item ? $item->price * $cartItem["quantity"] : 0;
+    
+        // 计算小计、运费和总价
+        $subtotal = $cart->sum(function ($cartItem) {
+            $item = Item::find($cartItem->item_id);
+            return $item ? $item->price * $cartItem->quantity : 0;
         });
+    
         $shippingFee = 5.0;
         $total = $subtotal + $shippingFee;
-
+    
+        // 创建订单
         $order = Order::create([
-            "user_id" => 1,
+            "user_id" => Auth::id(),
             "total_price" => $total,
             "status" => "completed",
         ]);
-
+    
+        // 创建订单项
         foreach ($cart as $cartItem) {
-            $item = Item::find($cartItem["item_id"]);
+            $item = Item::find($cartItem->item_id);
             if ($item) {
-                $selection_id = $cartItem["item_selection"] ?? null;
-                $selection_option = $selection_id
-                    ? ItemSelection::where("id", $selection_id)->value("option")
-                    : null;
-
+                $selection_option = $cartItem->item_selection ?? 'N/A';
+    
                 OrderItem::create([
                     "order_id" => $order->id,
                     "item_id" => $item->id,
                     "item_name" => $item->name ?? "Unknown Product",
-                    "item_selection" => $selection_option ?? "N/A",
-                    "quantity" => $cartItem["quantity"],
+                    "item_selection" => $selection_option,
+                    "quantity" => $cartItem->quantity,
                     "price" => $item->price,
                     "image" => $item->image ?? "images/default-image.jpg",
                 ]);
             }
         }
-
+    
+        // 删除用户购物车中的商品
+        $cart->each(function ($cartItem) {
+            $cartItem->delete();
+        });
+    
+        // 创建支付信息并清空购物车
         $request->session()->put("order", [
             "id" => $order->id,
             "subtotal" => $subtotal,
@@ -167,117 +163,104 @@ class CartController extends Controller
             "total" => $total,
             "payment_method" => $paymentMethod,
         ]);
-
-        $request->session()->forget("cart");
-
+    
+        // 重定向到支付页面
         return redirect()->route("payment.processing");
     }
+    
+
 
     public function addToCart(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in to add items to your cart.');
+        }
+        
+        $user = Auth::user();
         $item_id = $request->input("item_id");
         $quantity = $request->input("quantity", 1);
-        $selection_id = $request->input("item_selection");
+        $selection = $request->input("item_selection");
 
-        $cart = $request->session()->get("cart", []);
-        $cart_key = $item_id . "_" . ($selection_id ?? "");
-        $cart[$cart_key] = [
-            "item_id" => $item_id,
-            "quantity" => $quantity,
-            "item_selection" => $selection_id,
-        ];
+        $existing = ShoppingCart::where('user_id', $user->id)
+            ->where('item_id', $item_id)
+            ->where('item_selection', $selection)
+            ->first();
 
-        $request->session()->put("cart", $cart);
-
-        return response()->json([
-            "success" => true,
-            "message" => "Item added to cart!",
-        ]);
-    }
-
-    public function cart(Request $request)
-    {
-        $cart = $request->session()->get("cart", []);
-
-        if (empty($cart)) {
-            $list = collect([]);
-            $total = 0;
-            return view("shopping_cart", compact("list", "total"));
+        if ($existing) {
+            $existing->quantity += $quantity;
+            $existing->save();
+        } else {
+            ShoppingCart::create([
+                'user_id' => $user->id,
+                'item_id' => $item_id,
+                'item_selection' => $selection,
+                'quantity' => $quantity,
+            ]);
         }
 
-        $item_ids = array_map(function ($item) {
-            return $item["item_id"];
-        }, $cart);
+        return redirect()->back()->with('success', 'Item added to cart!');
+    }
 
-        $items = Item::with("images")
-            ->whereIn("id", $item_ids)
-            ->select("id", "name", "price")
-            ->get()
-            ->keyBy("id");
 
-        $list = collect([]);
+    public function cart()
+    {
+        $cartItems = ShoppingCart::with('item.images')
+            ->where('user_id', Auth::id())
+            ->get();
+    
+        $list = collect();
         $total = 0;
-
-        foreach ($cart as $cart_key => $cart_item) {
-            $item_id = $cart_item["item_id"];
-            $quantity = $cart_item["quantity"];
-            $selection_option = $cart_item["item_selection"] ?? null;
-
-            $item = $items->get($item_id);
-
-            if ($item) {
-                $list->push(
-                    (object) [
-                        "item_id" => $item_id,
-                        "name" => $item->name,
-                        "price" => $item->price,
-                        "image" => $item->images->first()->url ?? null,
-                        "qty" => $quantity,
-                        "item_selection" => $selection_option,
-                    ],
-                );
-
-                $total += $item->price * $quantity;
-            }
+    
+        foreach ($cartItems as $cartItem) {
+            $list->push((object)[
+                'id' => $cartItem->id, // 添加这个字段！
+                'item_id' => $cartItem->item_id,
+                'name' => $cartItem->item->name,
+                'price' => $cartItem->item->price,
+                'image' => optional($cartItem->item->images->first())->url,
+                'qty' => $cartItem->quantity, // 这个字段原本是 quantity
+                'item_selection' => $cartItem->item_selection,
+            ]);
+            $total += $cartItem->item->price * $cartItem->quantity;
         }
-
-        return view("shopping_cart", compact("list", "total"));
+    
+        return view('shopping_cart', compact('list', 'total'));
     }
-
-    public function updateCart(Request $request, $item_id)
+    
+    
+    public function updateCart(Request $request, $id)
     {
-        $quantity = $request->input("quantity");
-        $cart = $request->session()->get("cart", []);
-
-        foreach ($cart as $cart_key => $cart_item) {
-            if ($cart_item["item_id"] == $item_id) {
-                $cart[$cart_key]["quantity"] = $quantity;
-                break;
-            }
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+    
+        // Find the cart item by its ID
+        $cartItem = ShoppingCart::where('id', $id)
+            ->where('user_id', Auth::id())  // Ensure that the item belongs to the authenticated user
+            ->first();
+    
+        if ($cartItem) {
+            // Update the quantity
+            $cartItem->quantity = $request->quantity;
+            $cartItem->save();
+            
+            return redirect()->route('shopping.cart')->with('success', 'Cart updated successfully');
+        } else {
+            return redirect()->route('shopping.cart')->with('error', 'Item not found in your cart');
         }
-
-        $request->session()->put("cart", $cart);
-
-        return redirect()
-            ->route("cart")
-            ->with("success", "Cart updated!");
     }
-
-    public function removeFromCart(Request $request, $item_id)
+    
+    
+    public function removeFromCart($id)
     {
-        $cart = $request->session()->get("cart", []);
-
-        foreach ($cart as $cart_key => $cart_item) {
-            if ($cart_item["item_id"] == $item_id) {
-                unset($cart[$cart_key]);
-                break;
-            }
-        }
-
-        $request->session()->put("cart", $cart);
-
-        return redirect()
-            ->route("cart")
-            ->with("success", "Item removed from cart!");
+        ShoppingCart::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->delete();
+        
+        return redirect()->route('shopping.cart')->with('success', 'Item removed from cart!');
     }
+    
+    
+    
+    
 }
