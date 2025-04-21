@@ -106,20 +106,26 @@
         </div>
     </div>
 
-    <!-- Add to Cart Form -->
-    <div style="text-align: center; margin-top: 20px;">
-        <form id="addToCartForm" action="{{ route('cart.add') }}" method="POST">
-            @csrf
-            <input type="hidden" name="item_id" value="{{ $item->id }}">
-            
-            @if($item->selections->isNotEmpty())
-                <input type="hidden" name="item_selection" id="item_selection" value="">
-            @endif
+    <!-- Add to Cart (admin cannot) -->
+    @cannot('isAdmin')
+        <div style="text-align: center; margin-top: 20px;">
+            <form id="addToCartForm" action="{{ route('cart.add') }}" method="POST">
+                @csrf
+                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                
+                @if($item->selections->isNotEmpty())
+                    <input type="hidden" name="item_selection" id="item_selection" value="">
+                @endif
 
-            <input type="number" name="quantity" value="1" min="1" style="width: 60px; margin-right: 10px;">
-            <button type="submit" class="btn btn-primary">Add to cart</button>
-        </form>
-    </div>
+                <input type="number" name="quantity" value="1" min="1" style="width: 60px; margin-right: 10px;">
+                <button type="submit" class="btn btn-primary">Add to cart</button>
+            </form>
+        </div>
+    @else
+        <div style="text-align: center; margin-top: 20px;">
+            <p class="text-danger">Only regular users can add items to the cart.</p>
+        </div>
+    @endcannot
 
     <script>
         // Selection image preview (optional)

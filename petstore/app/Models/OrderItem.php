@@ -17,12 +17,12 @@ class OrderItem extends Model
         'price'
     ];
 
-    public function order(): BelongsTo
+    public function order()
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
     }
 
-    public function item(): BelongsTo
+    public function item()
     {
         return $this->belongsTo(Item::class, 'item_id', 'id');
     }

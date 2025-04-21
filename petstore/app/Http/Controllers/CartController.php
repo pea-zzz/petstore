@@ -16,8 +16,11 @@ class CartController extends Controller
 {
     public function history()
     {
-        $user = auth()->user(); // 获取当前登录用户
-        $orders = $user->orders()->with('orderItems.item')->get(); // 获取用户的所有订单，并加载订单项及对应的商品
+        // Get all orders of the user, including order items and their associated products
+        $orders = Order::with(['orderItems.item'])
+                    ->where('user_id', auth()->id())
+                    ->orderBy('created_at', 'desc')
+                    ->get();
     
         return view('order_history', compact('orders'));
     }
@@ -30,7 +33,7 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        // 获取当前用户的购物车
+        // Get the current user's shopping cart
         $cart = ShoppingCart::where('user_id', Auth::id())->get();
 
         if ($cart->isEmpty()) {
@@ -39,10 +42,10 @@ class CartController extends Controller
                 ->with("error", "Your cart is empty.");
         }
 
-        // 获取购物车中的 item_ids
+        // Get item IDs from the shopping cart
         $item_ids = $cart->pluck('item_id')->toArray();
 
-        // 获取与购物车项相关的商品
+        // Get the items associated with the cart entries
         $items = Item::with('images')
             ->whereIn('id', $item_ids)
             ->select('id', 'name', 'price')
@@ -54,7 +57,7 @@ class CartController extends Controller
         $updatedCart = [];
         $invalidItems = false;
 
-        // 更新购物车数据
+        // Update shopping cart data
         foreach ($cart as $cart_item) {
             $item = $items->get($cart_item->item_id);
 
@@ -79,11 +82,11 @@ class CartController extends Controller
             }
         }
 
-        // 计算运费和总价
+        // Calculate shipping fee and total price
         $shippingFee = 5.0;
         $total = $subtotal + $shippingFee;
 
-        // 用户验证
+        // User validation
         $user = Auth::user();
 
         if (!$user) {
@@ -92,14 +95,14 @@ class CartController extends Controller
                 ->with("error", "User not found.");
         }
 
-        // 渲染结账页面
+        // Render the checkout page
         return view('checkout', compact('list', 'subtotal', 'shippingFee', 'total', 'user'));
     }
 
 
     public function processCheckout(Request $request)
     {
-        // 获取当前用户的购物车
+        // Get the current user's shopping cart
         $cart = ShoppingCart::where('user_id', Auth::id())->get();
     
         if ($cart->isEmpty()) {
@@ -108,7 +111,7 @@ class CartController extends Controller
                 ->with("error", "Your cart is empty.");
         }
     
-        // 获取支付方式
+        // Get the payment method
         $paymentMethod = $request->input("payment_method");
         if (!$paymentMethod) {
             return redirect()
@@ -116,7 +119,7 @@ class CartController extends Controller
                 ->with("error", "Please select a payment method.");
         }
     
-        // 计算小计、运费和总价
+        // Calculate subtotal, shipping fee, and total price
         $subtotal = $cart->sum(function ($cartItem) {
             $item = Item::find($cartItem->item_id);
             return $item ? $item->price * $cartItem->quantity : 0;
@@ -125,14 +128,14 @@ class CartController extends Controller
         $shippingFee = 5.0;
         $total = $subtotal + $shippingFee;
     
-        // 创建订单
+        // Create an order
         $order = Order::create([
             "user_id" => Auth::id(),
             "total_price" => $total,
             "status" => "completed",
         ]);
     
-        // 创建订单项
+        // Create order items and update stock values in Item table
         foreach ($cart as $cartItem) {
             $item = Item::find($cartItem->item_id);
             if ($item) {
@@ -147,15 +150,19 @@ class CartController extends Controller
                     "price" => $item->price,
                     "image" => $item->image ?? "images/default-image.jpg",
                 ]);
+
+                // Reduce stock based on the quantity purchased
+                $item->stock -= $cartItem->quantity;
+                $item->save(); // Save the updated stock value
             }
         }
     
-        // 删除用户购物车中的商品
+        // Remove items from the user's shopping cart
         $cart->each(function ($cartItem) {
             $cartItem->delete();
         });
     
-        // 创建支付信息并清空购物车
+        // Create payment information
         $request->session()->put("order", [
             "id" => $order->id,
             "subtotal" => $subtotal,
@@ -164,7 +171,7 @@ class CartController extends Controller
             "payment_method" => $paymentMethod,
         ]);
     
-        // 重定向到支付页面
+        // Redirect to the payment processing page
         return redirect()->route("payment.processing");
     }
     
@@ -212,15 +219,21 @@ class CartController extends Controller
         $total = 0;
     
         foreach ($cartItems as $cartItem) {
+            
+            if (!$cartItem->item) {
+                continue;               // Skip invalid/deleted items by admin
+            }
+
             $list->push((object)[
-                'id' => $cartItem->id, // 添加这个字段！
+                'id' => $cartItem->id,
                 'item_id' => $cartItem->item_id,
                 'name' => $cartItem->item->name,
                 'price' => $cartItem->item->price,
                 'image' => optional($cartItem->item->images->first())->url,
-                'qty' => $cartItem->quantity, // 这个字段原本是 quantity
+                'qty' => $cartItem->quantity,
                 'item_selection' => $cartItem->item_selection,
-            ]);
+                'stock' => $cartItem->item->stock, 
+            ]);            
             $total += $cartItem->item->price * $cartItem->quantity;
         }
     
@@ -259,8 +272,4 @@ class CartController extends Controller
         
         return redirect()->route('shopping.cart')->with('success', 'Item removed from cart!');
     }
-    
-    
-    
-    
 }

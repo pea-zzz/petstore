@@ -27,12 +27,20 @@ class User extends Authenticatable
         'address',
     ];
 
-    
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
+    /**
+     * Define a one-to-many relationship with the 
+     * Order, Item, ShoppingCart, BrowsingHistory, and Review models.
+     */
     public function orders()
     {
         return $this->hasMany(Order::class);
@@ -48,28 +56,9 @@ class User extends Authenticatable
         return $this->hasMany(BrowsingHistory::class);
     }
 
-    // Add relationship to Reviews
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 }

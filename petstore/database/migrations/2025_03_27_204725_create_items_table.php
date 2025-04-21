@@ -20,7 +20,6 @@ class CreateItemsTable extends Migration
             $table->integer('stock');
             $table->string('selection')->nullable(); // Selection can be NULL (no selection provided)
             $table->text('description')->nullable(); // Item description (nullable)
-            //$table->string('image')->nullable(); // Item image (nullable)
             $table->json('image')->nullable(); // This allows storing an array of image URLs
             $table->string('category_id');
             // Foreign key

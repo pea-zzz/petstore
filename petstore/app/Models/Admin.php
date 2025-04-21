@@ -21,4 +21,12 @@ class Admin extends Authenticatable
         'password', 
         'remember_token',
     ]; 
+
+    /**
+     * Define a one-to-many relationship with the Item model
+     */
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 } 

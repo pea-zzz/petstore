@@ -46,7 +46,13 @@
                             <form action="{{ route('cart.update', $item->id) }}" method="POST" style="display: flex; align-items: center; gap: 10px;">
                                 @csrf
                                 @method('PUT')
-                                <input type="number" name="quantity" value="{{ $item->qty }}" min="1" style="width: 60px; padding: 5px;">
+                                <input 
+                                    type="number" 
+                                    name="quantity" 
+                                    value="{{ $item->qty }}" 
+                                    min="1" 
+                                    max="{{ $item->stock }}"
+                                    style="width: 60px; padding: 5px;">
                                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
                             </form>
 

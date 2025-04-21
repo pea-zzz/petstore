@@ -44,7 +44,7 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        // 表单验证
+        // Form validation
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
@@ -55,15 +55,14 @@ class ItemController extends Controller
             'selections' => 'nullable|array',
             'selections.*.option' => 'nullable|string',
         ]);
-
-        dd('stopped');
     
-        // 处理上传的图片和选择项
+        // Handle uploaded images
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('items', 'public');
         }
     
+        // Create the item
         $item = Item::create([
             'name' => $request->name,
             'price' => $request->price,
@@ -73,13 +72,12 @@ class ItemController extends Controller
             'image' => $imagePath,
         ]);
     
-        // Handle Selections
+        // Save Selections
         if ($request->has('selections')) {
             foreach ($request->selections as $selection) {
                 if ($selection['option']) {
                     $item->selections()->create([
                         'option' => $selection['option'],
-                        'image_url' => $selection['image_url'] ?? null,
                     ]);
                 }
             }
@@ -87,7 +85,4 @@ class ItemController extends Controller
     
         return redirect()->route('admin.items.create')->with('success', 'Item created successfully!');
     }
-    
-    
-    
 }

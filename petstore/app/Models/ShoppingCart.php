@@ -16,12 +16,13 @@ class ShoppingCart extends Model
         'item_selection', 
         'quantity'];
 
-    public function user(): BelongsTo
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function item(): BelongsTo
+    public function item()
     {
         return $this->belongsTo(Item::class);
     }

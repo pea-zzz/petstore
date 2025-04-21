@@ -17,7 +17,7 @@ class AdminController extends Controller
     // Admin dashboard
     public function index()
     {
-        if (Gate::denies('access-admin-dashboard')) {
+        if (Gate::denies('isAdmin')) {
             abort(403, 'Unauthorized');
         }
 

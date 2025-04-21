@@ -15,7 +15,7 @@
     <!-- Our Philosophy Section -->
     <section class="mt-5 mb-5 p-4 bg-light rounded shadow-sm">
         <h2>Our Philosophy</h2>
-        <p>At Pet Store, we believe every pet deserves the best care, love, and products to lead a happy and healthy life. We're passionate about connecting pet owners with quality supplies that ensure their companions thrive.</p>
+        <p>At Pawzy Pet Store, we believe every pet deserves the best care, love, and products to lead a happy and healthy life. We're passionate about connecting pet owners with quality supplies that ensure their companions thrive.</p>
     </section>
     
     <!-- About Us Preview Section -->

@@ -25,14 +25,21 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-    
-        Gate::define('access-admin-dashboard', function ($user) {
-            return $user->role === 'admin';
-        });
+
+        /* define a user role */ 
+        Gate::define('isUser', function($user) { 
+            return $user->role == 'user'; 
+        }); 
+
+        /* define an administrator user role */ 
+        Gate::define('isAdmin', function($user) { 
+            return $user->role == 'admin'; 
+        }); 
 
         // Set the lifetime of the remember_token cookie (in minutes)
         Config::set('session.lifetime', 60 * 24 * 3); // 3 days
         Config::set('session.expire_on_close', false); // Do not log out immediately when the browser is closed
-      
+
+
     }
 }

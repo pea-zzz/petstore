@@ -53,12 +53,13 @@ Route::middleware('auth')->group(function () {
 
 // Routes only accessible to admins
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::get('items/create', [ItemController::class, 'create'])->name('items.create'); // create-item view
     Route::post('items', [ItemController::class, 'store'])->name('items.store');
     Route::get('orders', [OrderController::class, 'adminIndex'])->name('orders.index'); // orders.blade.php
 });
 
-Route::middleware('can:access-admin-dashboard')
+Route::middleware('can:isAdmin')
     ->get('dashboard', [AdminController::class, 'index'])
     ->name('admin.dashboard');
 
