@@ -76,7 +76,7 @@ Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])-
 Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
 
 // Home Page, About Us, Contact Us, and Search Results Page
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/search', [SearchController::class, 'search'])->name('search.results');
 Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact');
