@@ -211,6 +211,8 @@ class CartController extends Controller
 
     public function cart()
     {
+        // Retrieve all cart items belonging to the currently logged-in user,
+        // including related item and image information using Eloquent relationships.
         $cartItems = ShoppingCart::with('item.images')
             ->where('user_id', Auth::id())
             ->get();
@@ -218,12 +220,9 @@ class CartController extends Controller
         $list = collect();
         $total = 0;
     
+        // Loop through each cart item.
         foreach ($cartItems as $cartItem) {
-            
-            if (!$cartItem->item) {
-                continue;               // Skip invalid/deleted items by admin
-            }
-
+            // Format item data into a simple object to pass to the view.
             $list->push((object)[
                 'id' => $cartItem->id,
                 'item_id' => $cartItem->item_id,
@@ -237,6 +236,7 @@ class CartController extends Controller
             $total += $cartItem->item->price * $cartItem->quantity;
         }
     
+        // Return the processed list and total to the vie
         return view('shopping_cart', compact('list', 'total'));
     }
     

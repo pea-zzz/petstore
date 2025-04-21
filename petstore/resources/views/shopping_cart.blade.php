@@ -56,8 +56,6 @@
                                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
                             </form>
 
-
-
                             </td>
                             <td style="vertical-align: middle;">RM{{ number_format($item->price * $item->qty, 2) }}</td>
                             <td style="vertical-align: middle;">
