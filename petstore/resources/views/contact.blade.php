@@ -12,7 +12,7 @@
 
     <h1>Contact Us</h1>
     
-    <p>At Pet Store, we value our customers and are always happy to help! If you have any questions or need assistance, feel free to reach out to us. Below are the best ways to contact us:</p>
+    <p>At Pawzy Pet Store, we value our customers and are always happy to help! If you have any questions or need assistance, feel free to reach out to us. Below are the best ways to contact us:</p>
     <br>
 
     <h2>Email</h2>
@@ -26,7 +26,7 @@
     
     <h2>Visit Our Shop</h2>
     <p>If you’re local, feel free to drop by our store! Our address is:</p>
-    <p><strong>Pet Store</strong><br>
+    <p><strong>Pawzy Pet Store</strong><br>
     123 Pet Street, Suite 101<br>
     Pet City, PC 12345</p>
     <br>
