@@ -50,7 +50,7 @@ class BrowsingHistoryController extends Controller
         return redirect()->route('items.show', $itemId);
     }
 
-    // Migrate guest browsing history to authenticated user upon registration/login
+    // Migrate guest browsing history to authenticated user upon login
     public function migrateGuestHistory()
     {
         if (Auth::check()) {

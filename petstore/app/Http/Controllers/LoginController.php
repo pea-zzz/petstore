@@ -26,12 +26,16 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $remember = $request->has('remember'); // ✅ 加这一行
+        $remember = $request->has('remember');  // 加这一行 // add this line
 
-        if (Auth::attempt($credentials, $remember)) { // ✅ 传进去
+        if (Auth::attempt($credentials, $remember)) { // 传进去 // pass it in
             $request->session()->regenerate();
             
+            // Migrate guest history after login
+            app(\App\Http\Controllers\BrowsingHistoryController::class)->migrateGuestHistory();
+
             // 检查用户角色，跳转到对应的页面
+            // Check the user's role and redirect to the corresponding page
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {

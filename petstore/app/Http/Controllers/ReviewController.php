@@ -11,7 +11,6 @@ class ReviewController extends Controller
     // Show the form to submit a review
     public function create(Item $id)
     {
-        //$item = Item::findOrFail($id); // Ensure the item exists
         return view('reviews.create', ['item' => $id]);
     }
     

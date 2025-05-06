@@ -16,7 +16,6 @@ class CreateSelectionsTable extends Migration
         Schema::create('selections', function (Blueprint $table) {
             $table->id();
             $table->string('option')->nullable();// Selection name (e.g., "Small", "Medium", "Large")
-            //$table->string('image')->nullable();  // Make the image field nullable
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->timestamps();
         });
