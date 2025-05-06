@@ -11,18 +11,17 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); // 所有访问管理员界面的用户必须登录
+        $this->middleware('auth'); 
     }
 
     // Admin dashboard
     public function index()
     {
-        // 使用 Gate 检查用户是否有访问权限
-        if (Auth::user()->role !== 'admin') {
+        if (Gate::denies('isAdmin')) {
             abort(403, 'Unauthorized');
         }
 
-        return view('admin.dashboard'); // 管理员面板视图
+        return view('admin.dashboard'); 
     }
 
     // Admin logout

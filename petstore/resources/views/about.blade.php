@@ -7,7 +7,7 @@
     <h1>Our Story</h1>
     <p>Welcome to <strong>Pawzy Pet Store</strong>! 🐾</p>
 
-    <p>At Pet Store, we are dedicated to providing pet owners with an unparalleled online shopping experience for all their furry, scaly, and feathered friends. Since our launch, we’ve worked tirelessly to offer a wide range of high-quality pet products delivered right to your doorstep. Whether you're looking for food, toys, accessories, or grooming supplies, we've got everything you need to keep your pets happy and healthy.</p>
+    <p>At Pawzy Pet Store, we are dedicated to providing pet owners with an unparalleled online shopping experience for all their furry, scaly, and feathered friends. Since our launch, we’ve worked tirelessly to offer a wide range of high-quality pet products delivered right to your doorstep. Whether you're looking for food, toys, accessories, or grooming supplies, we've got everything you need to keep your pets happy and healthy.</p>
     <br>
     <h2>What We Offer</h2><br>
     <ul>
@@ -29,7 +29,7 @@
         </li>
     </ul>
     <br>
-    <h2>Why Choose Pet Store?</h2><br>
+    <h2>Why Choose Pawzy Pet Store?</h2><br>
     <ul>
         <li>
             <p><strong>Convenience</strong></p>
@@ -50,7 +50,7 @@
     </ul>
     <br>
     <h2>Our Vision</h2><br>
-    <p>At Pet Store, we’re committed to improving the lives of pets and pet owners alike. Our vision is to be the go-to online destination for all things pets, offering a seamless, enjoyable, and secure shopping experience for customers everywhere.</p>
+    <p>At Pawzy Pet Store, we’re committed to improving the lives of pets and pet owners alike. Our vision is to be the go-to online destination for all things pets, offering a seamless, enjoyable, and secure shopping experience for customers everywhere.</p>
     <br>
     <h2>Why Shop With Us?</h2><br>
     <ul>
@@ -68,6 +68,6 @@
         </li>
     </ul>
     <br><br>
-    <p>Thank you for choosing <strong>Pet Store</strong>! We’re excited to be part of your pet’s journey and look forward to serving you and your pets for many years to come. 🐶🐱🐰</p>
+    <p>Thank you for choosing <strong>Pawzy Pet Store</strong>! We’re excited to be part of your pet’s journey and look forward to serving you and your pets for many years to come. 🐶🐱🐰</p>
 </div>
 @endsection

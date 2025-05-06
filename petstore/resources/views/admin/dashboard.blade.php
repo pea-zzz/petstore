@@ -10,9 +10,9 @@
     <ul>
         <li><a href="{{ route('home') }}">View Home Page</a></li>
         <br>
-        <li><a href="{{ route('admin.items.create') }}">Add Item</a></li>
+        <li><a href="{{ route('admin.items.create') }}">Add Items</a></li>
         <br>
-        <li><a href="{{ route('admin.orders.index') }}">View Orders</a></li>
+        <li><a href="{{ route('admin.orders.index') }}">View All Orders</a></li>
     </ul>
 </div>
 @endsection

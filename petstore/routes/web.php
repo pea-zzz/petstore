@@ -59,6 +59,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('orders', [OrderController::class, 'adminIndex'])->name('orders.index'); // orders.blade.php
 });
 
+Route::middleware('can:isAdmin')
+    ->get('dashboard', [AdminController::class, 'index'])
+    ->name('admin.dashboard');
 
 // Shopping cart routes
 Route::get('/shopping_cart', [CartController::class, 'cart'])->name('shopping.cart');
@@ -73,7 +76,7 @@ Route::get('/payment-processing', [CartController::class, 'paymentProcessing'])-
 Route::get('/order/history', [CartController::class, 'history'])->name('order.history');
 
 // Home Page, About Us, Contact Us, and Search Results Page
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/search', [SearchController::class, 'search'])->name('search.results');
 Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact');

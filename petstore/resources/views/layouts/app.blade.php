@@ -27,15 +27,22 @@
     <nav>
         <ul>
             <li><a href="{{ route('home') }}">Home</a></li>
+            @can('isAdmin')
+                <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+            @endcan
             <li><a href="{{ route('categories.index') }}">Our Products</a></li>
-            <li><a href="{{ route('profile') }}">Profile</a></li>
-            <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
-            <li><a href="{{ route('contact') }}">Contact</a></li>
-            <li><a href="{{ route('about') }}">About Us</a></li>
+            @cannot('isAdmin')
+                <li><a href="{{ route('profile') }}">Profile</a></li>
+                <li><a href="{{ route('browsing.history') }}">Browsing History</a></li>
+                <li><a href="{{ route('contact') }}">Contact</a></li>
+                <li><a href="{{ route('about') }}">About Us</a></li>
+            @endcannot
             
             <!-- Add Order History link -->
             @auth
-                <li><a href="{{ route('order.history') }}">Order History</a></li>
+                @cannot('isAdmin')
+                    <li><a href="{{ route('order.history') }}">Order History</a></li>
+                @endcan
             @endauth
 
             <!-- Conditional Links Based on Authentication -->
@@ -53,7 +60,7 @@
                 </li>
 
                 <!-- Add Cart Icon for Non-Admin Users -->
-                @if (Auth::check() && Auth::user()->role != 'admin')
+                @can('isUser')
                     <li>
                         <a href="{{ route('shopping.cart') }}">
                             <img src="{{ asset('images/logo/cart-icon.png') }}" alt="Shopping Cart" style="height: 30px;">
@@ -62,7 +69,7 @@
                             @endif
                         </a>
                     </li>
-                @endif
+                @endcan
 
             @endguest
         </ul>

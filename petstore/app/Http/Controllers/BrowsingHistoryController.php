@@ -58,7 +58,7 @@ class BrowsingHistoryController extends Controller
             $guestHistory = session()->get('guest_browsing_history', []);
 
             // Log the guest history to check if it's being stored correctly
-            \Log::info('Guest Browsing History:', $guestHistory);
+            Log::info('Guest Browsing History:', $guestHistory);
 
             // If guest history exists, transfer it to the user's history in the database
             if (!empty($guestHistory)) {

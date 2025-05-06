@@ -31,7 +31,6 @@ class CreateOrdersTable extends Migration
             $table->string('item_selection')->nullable(); // Selection can be NULL (no selection provided)
             $table->decimal('price', 8, 2);
             $table->timestamps();
-            // Foreign Keys
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
         });

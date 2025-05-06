@@ -15,7 +15,6 @@ class CreateShoppingCartsTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->id();
-            // Foreign key
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->string('item_selection')->nullable(); // Selection can be NULL (if no selection provided)

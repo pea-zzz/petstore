@@ -31,7 +31,7 @@
             <!-- Admin specific link -->
             @auth
                 @if(Auth::user()->role == 'admin')
-                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
                     <li><a href="{{ route('admin.items.create') }}">Add Item</a></li>
                     <li><a href="{{ route('admin.orders.index') }}">View Orders</a></li>
                 @endif
